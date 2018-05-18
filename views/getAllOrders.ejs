@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>mLab MongoDB test</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h2>Database Results getting Orders </h2>
+    <ul>
+        <% results.forEach(function(r) { %>
+        <li>Order ID:<%= r.id %> </li>
+        <ul>
+            <li>Customer ID:( <%=r.CUSTOMER_ID %>  )</li>
+            <li>Billing ID: ( <%=r.BILLING_ID %> ) </li>
+            <li>Shipping ID: ( <%=r.SHIPPING_ID %> ) </li>
+            <li>Date: ( <%=r.DATE %> ) </li>
+            <li>Products: ( <%=r.PRODUCTS %> ) </li>
+            <li>Orders: ( <%=r.ORDER_TOTAL %> ) </li>
+        </ul>
+        <br/><br/>
+        <% }); %>
+    </ul>
+</div>
+
+</body>
+</html>
