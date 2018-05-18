@@ -9,29 +9,40 @@ var mongoDBURI = process.env.MONGODB_URI || 'mongodb://suman:suman@ds149069.mlab
  * @param response
  *
  */
-module.exports = getAllOrder;
+module.exports.getAllOrders =  function (request, response) {
 
-//**************************************************************************
-//***** mongodb get all of the Orders in Orders collection where frequence>=1
-//      and sort by the name of the route.  Render information in the views/pages/mongodb.ejs
-getAllOrder.get('/getAllOrders', function (request, response) {
-mongodb.MongoClient.connect('mongodb://suman:suman@ds149069.mlab.com:49069/heroku_2v45zr2n', function(err, client) {
-    if(err) throw err;
-    //get collection of Orders
-    var db = client.db('heroku_2v45zr2n');  // in v3 we need to get the db from the client
-    var Orders = db.collection('Orders');
-    //get all Orders with frequency >=1
-    Orders.find({ frequency : { $gte: 0 } }).sort({ name: 1 }).toArray(function (err, docs) {
+    mongodb.MongoClient.connect(mongoDBURI, function(err, db) {
         if(err) throw err;
 
-        response.render('getAllOrders', {results: docs});
+        //get collection of routes
+        var Orders = db.collection('Orders');
 
-    });
 
-    //close connection when your app is terminating.
-    // db.close(function (err) {
-    client.close(function (err) {
-        if(err) throw err;
-    });
-});//end of connect
-});//end app.get
+        //FIRST showing you one way of making request for ALL routes and cycle through with a forEach loop on returned Cursor
+        //   this request and loop  is to display content in the  console log
+
+
+
+        //SECOND -show another way to make request for ALL Routes  and simply collect the  documents as an
+        //   array called docs that you  forward to the  getAllRoutes.ejs view for use there
+        Orders.find().toArray(function (err, docs) {
+            if(err) throw err;
+
+            response.render('getAllOrders', {results: docs});
+
+        });
+
+
+        //Showing in comments here some alternative read (find) requests
+        //this gets Routes where frequency>=10 and sorts by name
+        // Routes.find({ "frequency": { "$gte": 10 } }).sort({ name: 1 }).toArray(function (err, docs) {
+        // this sorts all the Routes by name
+        //  Routes.find().sort({ name: 1 }).toArray(fu namenction (err, docs) {
+
+
+        //close connection when your app is terminating.
+        db.close(function (err) {
+            if(err) throw err;
+        });
+    });//end of connect
+};//end function
